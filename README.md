@@ -73,7 +73,15 @@ So, you can add this swift source file into your Xcode project and use credentia
 
 
 ```swift
-let credentialsData: Data? = Data.credentials
+	if let data = Data.credentials,
+	   let dictionary = try? PropertyListSerialization.propertyList(from: data, format: nil) as? NSDictionary,
+	   let apiKey = dictionary["API_KEY"] as? String,
+	   let secretKey = dictionary["SECRET_KEY"] as? String {
+		// ...
+	}
+	else {
+		// something went wrong
+	}
 ```
 
 Remember, `-source` option specifies the location of source code, but source file name is used for swift's identifier, for example `-source ~/Desktop/foo.swift` generates `Data.foo`, so make sure identifier will not collide within your project.
