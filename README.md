@@ -104,6 +104,15 @@ You can decrypt encrypted file from command line.  You must specify proper encry
 $ credential-swift decrypt -in credentials.enc -out credentials.plist -key {hexadecimal_32byte_key}
 ```
 
+## Generating 32 byte random encryption key
+
+In case you need to generate random 32 byte key for encryption key, you may use `openssl` to do this as follows. 
+
+```console
+$ openssl rand -hex 32
+9d67bd41afb4c2f9af8361928b2a6379c8969760eb711d401415a7a1f2268a72
+```
+
 ## Status
 
 I think it is not ready for productions, but should be ready for testing.
