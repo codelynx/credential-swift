@@ -13,7 +13,7 @@ enum CryptoMode: String, CaseIterable, ExpressibleByArgument {
 }
 
 struct credential_swift: ParsableCommand {
-	static let version = "0.5"
+	static let version = "0.5.1"
 
 	static let configuration = CommandConfiguration(
 		commandName: "credential-swift",
@@ -66,8 +66,8 @@ struct credential_swift: ParsableCommand {
 	
 	func codegen(sourcePath: String, outputData: Data, keyData: Data) throws {
 		guard sourcePath.pathExtension == "swift" else { throw "must specify .swift for source" }
-		let identifer = sourcePath.lastPathComponent.deletingPathExtension
-		guard self.isValidIdentifier(identifer) else { throw "identifier contains some unexpected characters" }
+		let identifier = sourcePath.lastPathComponent.deletingPathExtension
+		guard self.isValidIdentifier(identifier) else { throw "identifier contains some unexpected characters" }
 		let keyString = keyData.map { String(format: "0x%02x", $0) }.joined(separator: ",")
 		let bytesString =
 				stride(from: 0, to: outputData.count, by: 16).map {
@@ -90,7 +90,7 @@ struct credential_swift: ParsableCommand {
 			}
 		}
 		extension Data {
-			static var catalog: Data? = {
+			static var \(identifier): Data? = {
 				let key = Data([\(keyString)])
 				return try? Data([
 		\(bytesString)
