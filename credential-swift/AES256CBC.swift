@@ -19,15 +19,6 @@ fileprivate enum AES256CBC_error: String, Error, CustomStringConvertible {
 	}
 }
 
-fileprivate extension Data {
-	static func randomData(count: Int) -> Data {
-		let randomData = NSMutableData(length: count)!
-		let result = SecRandomCopyBytes(kSecRandomDefault, count, randomData.mutableBytes)
-		precondition(result == errSecSuccess)
-		return randomData as Data
-	}
-}
-
 func encrypt_AES256CBC(contentData: Data, keyData: Data) throws -> Data {
 	let keyLength = kCCKeySizeAES256
 	let blockSize = kCCBlockSizeAES128
@@ -35,8 +26,14 @@ func encrypt_AES256CBC(contentData: Data, keyData: Data) throws -> Data {
 	let contentData = contentData as NSData
 	let keyData = keyData as NSData
 	let encryptedContentData = NSMutableData(length: contentData.count + blockSize)!
-	let ivData = Data.randomData(count: 16) as NSData
-	precondition(ivData.count == 16)
+
+	// generate random 16 byte iv data
+	let ivLength = 16
+	let randomData = NSMutableData(length: ivLength)!
+	let result = SecRandomCopyBytes(kSecRandomDefault, ivLength, randomData.mutableBytes)
+	precondition(result == errSecSuccess)
+	let ivData = randomData as NSData
+	precondition(ivData.count == ivLength)
 	
 	let keyPtr = keyData.bytes
 	let ivPtr = ivData.bytes

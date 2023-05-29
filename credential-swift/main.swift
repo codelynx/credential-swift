@@ -14,7 +14,7 @@ enum CryptoMode: String, CaseIterable, ExpressibleByArgument {
 }
 
 struct credential_swift: ParsableCommand {
-	static let version = "0.9"
+	static let version = "0.9.1"
 	
 	static let configuration = CommandConfiguration(
 		commandName: "credential-swift",
@@ -44,6 +44,7 @@ struct credential_swift: ParsableCommand {
 		
 		let keyLength = 32
 		switch mode {
+
 		case .encrypt:
 			let inputData = try Data(contentsOf: URL(fileURLWithPath: `in`))
 			let keyData: Data
@@ -91,6 +92,7 @@ struct credential_swift: ParsableCommand {
 				let kotlinfilepath = FileManager.default.currentDirectoryPath.appendingPathComponent(encrypted_data_name.appendingPathExtension("kt")!)
 				try kotlinsource.data(using: .utf8)!.write(to: URL(filePath: kotlinfilepath))
 			}
+
 		case .decrypt:
 			guard FileManager.default.fileExists(atPath: key) else { throw "decryption key file not found" }
 			let keyData = try Data(contentsOf: URL(fileURLWithPath: key))
